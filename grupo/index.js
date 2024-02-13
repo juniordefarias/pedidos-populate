@@ -25,26 +25,29 @@ rows.forEach((row) => {
   const columns = row.split(',');
 
   client.query(`
-    INSERT INTO grupo--------(
+    INSERT INTO category(
       id,
-      descricao,
-      id_secao,
-      cancelado
+      description,
+      id_section,
+      excluded
     )
     VALUES($1 ,$2, $3, $4)
   `, [
     Number(columns[0]),
     columns[1]?.replace(/"/g, ''),
     Number(columns[2]),
-    columns[3]?.replace(/"/g, ''),
+    columns[3]?.replace(/"/g, '') === 'S' ? 'Y' : columns[3]?.replace(/"/g, ''),
   ])
-    .catch(console.error);
+    .catch(erro => {
+      //console.error(erro);
+      console.log({erro, columns})
+    });
 
   /* console.log(
     Number(columns[0]),
     columns[1]?.replace(/"/g, ''),
     Number(columns[2]),
-    columns[3]?.replace(/"/g, ''),
+    columns[3]?.replace(/"/g, '') === 'S' ? 'Y' : columns[3]?.replace(/"/g, ''),
   ); */
 });
 

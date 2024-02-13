@@ -17,7 +17,7 @@ client.connect();
 const fs = require('fs');
 
 // relations
-const data = fs.readFileSync('produto_fornecedor/produto_fornecedor.csv', 'utf-8');
+const data = fs.readFileSync('product_sales/product_sales.csv', 'utf-8');
 
 const rows = data.split('\n');
 
@@ -25,24 +25,22 @@ rows.forEach((row) => {
   const columns = row.split(',');
 
   client.query(`
-    INSERT INTO product_provider(
-      id,
+    INSERT INTO product_sales(
       id_product,
-      id_provider,
-      reference,
-      purchase_price,
-      multiplier,
-      divider
+      value_sold,
+      quantity_sold,
+      daily_quantity,
+      part_value,
+      part_quantity
     )
-    VALUES($1, $2, $3, $4, $5, $6, $7)
+    VALUES($1, $2, $3, $4, $5, $6)
   `, [
     Number(columns[0]),
     Number(columns[1]),
-    Number(columns[2]),
+    columns[2]?.replace(/"/g, ''),
     columns[3]?.replace(/"/g, ''),
-    Number(columns[4]?.replace(/"/g, '')),
+    columns[4]?.replace(/"/g, ''),
     columns[5]?.replace(/"/g, ''),
-    columns[6]?.replace(/"/g, ''),
   ]) 
     .catch(erro => {
       //console.error(erro);

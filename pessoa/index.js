@@ -25,22 +25,27 @@ rows.forEach((row) => {
   const columns = row.split(',');
 
   client.query(`
-    INSERT INTO pessoa----(
+    INSERT INTO provider(
       id,
-      nome,
+      name,
       cnpj,
       phone,
-      email
+      email,
+      excluded
     )
-    VALUES($1 ,$2, $3, $4, $5)
+    VALUES($1 ,$2, $3, $4, $5, $6)
     `, [
     Number(columns[0]),
     columns[1]?.replace(/"/g, ''),
     columns[2]?.replace(/"/g, ''),
     columns[3]?.replace(/"/g, '').substring(0, 11),
     columns[4]?.replace(/"/g, ''),
+    columns[5]?.replace(/"/g, '') === 'S' ? 'Y' : columns[5]?.replace(/"/g, '')
   ])
-    .catch(console.error);
+    .catch(erro => {
+      //console.error(erro);
+      console.log({erro, columns})
+    });
 
   /* const column2 = columns[2]?.replace(/"/g, '');
   if (column2.length > 14) {

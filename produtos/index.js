@@ -24,16 +24,16 @@ rows.forEach((row) => {
   const columns = row.split(';');
 
   client.query(`
-    INSERT INTO produtos----(
+    INSERT INTO product(
       id,
-      nome,
-      codigo,
-      preco_compra,
-      preco_venda,
-      estoque,
-      unidade,
-      id_grupo,
-      eliminado
+      description,
+      barcode,
+      purchase_price,
+      sale_price,
+      inventory,
+      measure,
+      id_category,
+      excluded
     )
     VALUES($1 ,$2, $3, $4, $5, $6, $7, $8, $9)
   `, [
@@ -45,11 +45,11 @@ rows.forEach((row) => {
     Number(columns[5]),
     !columns[6] ? 'UN' : columns[6], //corrigir os registros que veem sem valor de unidade
     Number(columns[7]),
-    columns[8],
+    columns[8]?.replace(/"/g, '') === 'S' ? 'Y' : columns[8]?.replace(/"/g, ''),
   ])
     .catch(erro => {
       //console.error(erro);
-      console.log({erro, row})
+      console.log({erro, columns})
     });
 
   /* console.log(

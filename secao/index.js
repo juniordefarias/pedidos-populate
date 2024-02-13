@@ -25,10 +25,10 @@ rows.forEach((row) => {
   const columns = row.split(',');
 
   client.query(`
-    INSERT INTO secao-------(
+    INSERT INTO section(
       id,
-      descricao,
-      eliminado
+      description,
+      excluded
     )
     VALUES($1 ,$2, $3)
   `, [
@@ -36,7 +36,10 @@ rows.forEach((row) => {
     columns[1]?.replace(/"/g, ''),
     columns[2]?.replace(/"/g, ''),
   ])
-    .catch(console.error);
+    .catch(erro => {
+      //console.error(erro);
+      console.log({erro, columns})
+    });
 
   /* console.log(
     Number(columns[0]),
